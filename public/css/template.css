@@ -1,0 +1,15 @@
+body {
+  padding-top: 5rem;
+}
+.template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.dropdown-item:hover{
+  background-color: #343a40;
+  color: white;
+}
+
+.box_center{
+ position: fixed;
+}
