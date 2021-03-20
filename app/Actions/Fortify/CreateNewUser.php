@@ -24,29 +24,21 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $this->passwordRules(),
+            'password' => ['required','string','confirmed','min:8'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
-        ])->validate();
-       
-        // $rules = [
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|string|email|max:255|unique:users',
-        //     'password' => 'required|string|confirmed|min:8',
-        // ];
+        ],[
+            'name.required'      => 'Por favor, informe o seu nome',
+            'name.max'           => 'O nome não pode conter mais que 255 caracteres',
+            'email.required'     => 'Por favor, informe o seu email',
+            'email.max'          => 'O email não pode conter mais que 255 caracteres',
+            'email.email'  => 'Informe um endereço de email valido',
+            'email.unique' => 'O email informado já é cadastrado',
+            'password.required'  =>  'Por favor, informe a sua senha',
+            'password.min'       => 'A senha deve ter no mínimo 8 dígitos',
+            'password.confirmed' => 'A confirmação não corresponde à senha informada'
 
-        // $message = [
-        //     'name.required'      => 'Por favor, informe o seu nome',
-        //     'email.required'     => 'Por favor, informe o seu email',
-        //     'email.email'  => 'Informe um endereço de email valido',
-        //     'email.unique' => 'O email informado já é cadastrado',
-        //     'password.required'  =>  'Por favor, informe a sua senha',
-        //     'password.min'       => 'A senha deve ter no mínimo 8 digitos',
-        //     'password.confirmed' => 'A confirmação não corresponde à senha informada'
-
-        // ];
-
-        // $request->validate($rules, $message);
-    
+        ]
+        )->validate();
 
         return User::create([
             'name' => $input['name'],

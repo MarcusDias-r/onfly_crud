@@ -11,7 +11,7 @@
 <table class="table table-responsive-sm">
     <thead>
       <tr>
-        <a class="btn btn-outline-dark btn-lg btn-block mb-3 " href="{{route('despesas.create')}}">Registrar Despesa</a>
+        <a class="btn btn-outline-dark btn-lg btn-block mb-3" href="{{route('despesas.create')}}">Registrar Despesa</a>
       </tr>
       
       <tr>
