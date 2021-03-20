@@ -35,7 +35,7 @@ class CreateNewUser implements CreatesNewUsers
             'email.unique' => 'O email informado já é cadastrado',
             'password.required'  =>  'Por favor, informe a sua senha',
             'password.min'       => 'A senha deve ter no mínimo 8 dígitos',
-            'password.confirmed' => 'A confirmação não corresponde à senha informada'
+            'password.confirmed' => 'A confirmação não corresponde à senha informada.'
 
         ]
         )->validate();
