@@ -2,18 +2,17 @@
 @section('content')
 <style>
   .description{
-          max-height: 20ch;
+          max-width: 20ch;
           overflow: hidden;
           text-overflow: ellipsis;
-      
+          white-space: nowrap;
         };
 </style>
 <table class="table table-responsive-sm">
     <thead>
       <tr>
-        <a class="btn btn-outline-dark btn-lg btn-block mb-3" href="{{route('despesas.create')}}">Registrar Despesa</a>
+        <a class="btn btn-outline-dark btn-lg btn-block mb-3 " href="{{route('despesas.create')}}">Registrar Despesa</a>
       </tr>
-
       
       <tr>
         <th scope="col">Imagem</th>
@@ -42,10 +41,10 @@
               <img src="{{'storage/images/'.$r->image}}" class="rounded " style="max-width:120px; max-height: 120px">
             @endif
           </td>
-            <td class="align-middle">{{$r->description}}</td>
+            <td class="align-middle description">{{$r->description}}</td>
           <td class="align-middle">{{$autor}}</td>
           <td class="align-middle">R${{number_format($r->value,2, ',','.')}}</td>
-          <td class="align-middle">{{date_format($r->created_at ,"d/m/Y \a\s H:i")}}</td>
+          <td class="align-middle">{{date_format($r->created_at ,"d/m/Y \à\s H:i")}}</td>
           <td class="align-middle">
             <form action="{{route('despesas.destroy',['despesa' => $r->id])}}" method="POST">
               @csrf

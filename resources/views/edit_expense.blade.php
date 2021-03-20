@@ -25,7 +25,7 @@
             <input type="file" class="form-control-file" name="image" id="image">
         </div>
         <div class="form-group">
-            <input class="btn btn-outline-dark btn-lg btn-block" type="submit" value="Editar">
+            <input class="btn btn-outline-dark btn-lg btn-block" type="submit" value="Salvar">
         </div>
      
     </form>
