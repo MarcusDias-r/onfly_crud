@@ -2,7 +2,11 @@
 @section('content')
 <div class="relative ">
   <div class="card mb-3" style="max-width: 700px; margin: 0 auto;" >
-      <img class="card-img-top" src="{{asset('storage/images/'.$data->image)}}"  >
+      
+    @if($data->image)
+      <img class="card-img-top" src="{{asset('storage/images/'.$data->image)}}">
+    @endif
+     
       <div class="card-body">
         <h5 class="card-title">R${{number_format($data->value,2, ',','.')}}</h5>
         <p class="card-text">{{$data->description}}</p>

@@ -22,7 +22,11 @@
             <li class="nav-item dropdown ">
               <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{Auth::user()->name}} </a>
               <div class="dropdown-menu " aria-labelledby="dropdown01">
-                <a class="dropdown-item" href="{{route('logout')}}">Sair</a>
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                <a class="dropdown-item"  onclick="event.preventDefault(); this.closest('form').submit();">Sair</a>
+             
+                </form>
                </div>
             </li>
           </ul>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Expense;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use File;
 
 class ExpensesController extends Controller
 {
@@ -50,22 +51,39 @@ class ExpensesController extends Controller
             'description' => 'required|string',
             'value'       => 'required',
             'image'       => 'max:8000|mimes:jpg,png,jpeg',
+            'date'        => 'date_format:d/m/Y',
+            'time'        => 'date_format:H:i'
         ];
 
         $message = [
             'description.required' => 'Defina uma descrição para à despesa',
             'value.required'       => 'Informe o valor da despesa',
-            'image.size'            => 'O tamanho da imagem não poderá exceder 8mb',
-            'image.mimes'           => 'Apenas os formatos jpg, png e jpeg são suportados',
+            'image.size'           => 'O tamanho da imagem não poderá exceder 8mb',
+            'image.mimes'          => 'Apenas os formatos jpg, png e jpeg são suportados',
+            'date.date_format'     => 'Data inválida, o formato utilizado é dia/mês/ano(com 4 dígitos).',
+            'time.date_format'     => 'Formato de hora informado é invalido.'
         ];
 
         $request->validate($rules, $message);
 
+        // if($request->time){
+            $date = str_replace('/','-', $request->date);
+            $time = $request->time.":00";
+            $date = $date.' '.$time;
+            $date =  date_create($date);
+        // }
+        // else
+        // {
+        //     $date = str_replace('/','-', $request->date);
+        //     $date =  date_create($date);
+        // }
+
         $expense = new Expense();
-        $expense->description = $request->description;
-        $expense->value       = str_replace(",", ".", str_replace(".","", $request->value));
-        $expense->user_id     = Auth::user()->id;
-        
+        $expense->description  = $request->description;
+        $expense->value        = str_replace(",", ".", str_replace(".","", $request->value));
+        $expense->user_id      = Auth::user()->id;
+        $expense->expense_date = $date;
+
         if(isset($request->image)){
             $file      = $request->allFiles()['image'];
             $file_name = uniqid('img_').'.'.$file->extension();
@@ -102,6 +120,7 @@ class ExpensesController extends Controller
     {
         $data = Expense::where('id',$id)->first();
 
+
         return view('edit_expense', ['data'=> $data]);
     }
 
@@ -119,6 +138,8 @@ class ExpensesController extends Controller
             'description' => 'required|string',
             'value'       => 'required',
             'image'       => 'max:8000|mimes:jpg,png,jpeg',
+            'date'        => 'date_format:d/m/Y',
+            'time'        => 'date_format:H:i'
         ];
 
         $message = [
@@ -126,14 +147,22 @@ class ExpensesController extends Controller
             'value.required'       => 'Informe o valor da despesa',
             'image.size'           => 'O tamanho da imagem não poderá exceder 8mb',
             'image.mimes'          => 'Apenas os formatos jpg, png e jpeg são suportados',
+            'date.date_format'     => 'Data inválida, o formato utilizado é dia/mês/ano(com 4 dígitos).',
+            'time.date_format'     => 'Formato de hora informado é invalido.'
         ];
 
         $request->validate($rules, $message);
 
+        $date =  str_replace('/','-', $request->date);
+        $time =  $request->time.":00";
+        $date =  $date.' '.$time;
+        $date =  date_create($date);
+
         Expense::where('id', $id)
             ->update([
-                'description' => $request->description,
-                'value'       => str_replace(",", ".", str_replace(".","", $request->value))
+                'description'  => $request->description,
+                'value'        => str_replace(",", ".", str_replace(".","", $request->value)),
+                'expense_date' => $date
         ]);
 
         if($request->image)
@@ -151,9 +180,16 @@ class ExpensesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
+    {     
+        $p = Expense::where('id', $id)->first();
+
+        if($p->image)
+        {
+            Storage::delete('public/images/'.$p->image);
+        }
         Expense::where('id', $id)->delete();
-        
+   
+
         return redirect()->route('despesas.index');
     }
 }

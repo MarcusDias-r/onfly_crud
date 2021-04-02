@@ -13,7 +13,13 @@
       <tr>
         <a class="btn btn-outline-dark btn-lg btn-block mb-3" href="{{route('despesas.create')}}">Registrar Despesa</a>
       </tr>
-      
+
+      @if(count($records) === 0)
+        <div class="alert alert-warning" role="alert">
+          Não há nenhuma despesa cadastrada. Pressione o botão acima para começar
+        </div>
+      @endif 
+
       <tr>
         <th scope="col">Imagem</th>
         <th scope="col">Descrição</th>
@@ -42,9 +48,14 @@
             @endif
           </td>
             <td class="align-middle description">{{$r->description}}</td>
-          <td class="align-middle">{{$autor}}</td>
-          <td class="align-middle">R${{number_format($r->value,2, ',','.')}}</td>
-          <td class="align-middle">{{date_format($r->created_at ,"d/m/Y \à\s H:i")}}</td>
+            <td class="align-middle">{{$autor}}</td>
+            <td class="align-middle">R${{number_format($r->value,2, ',','.')}}</td>
+
+          @php
+            $date = date_create($r->expense_date);
+          @endphp
+
+          <td class="align-middle">{{date_format($date, "d/m/Y \à\s H:i")}}</td>
           <td class="align-middle">
             <form action="{{route('despesas.destroy',['despesa' => $r->id])}}" method="POST">
               @csrf
